@@ -15,8 +15,7 @@ function multiply(a, b) {
 function divide(a, b) {
     return a / b;
 }
-
-
+let buffer = [];
 let firstNumber;
 let secondNumber;
 let operator;
@@ -40,23 +39,19 @@ function operate(firstNumber, operator, secondNumber) {
     }
 }
 
-// operate(1, "+", 1);
-// operate(2, "-", 1);
-// operate(5, "*", 7);
-// operate(81, "/", 9);
-
 const displayTxt = document.querySelector(".display-txt");
 const numBtns = document.querySelectorAll(".num-btn");
 numBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         if (operator === undefined) {
-            firstNumber = parseInt(btn.textContent);
-            console.log(`First Number: ${firstNumber}`);
+            buffer.push(parseInt(btn.textContent));
+            firstNumber = buffer.join('');
+            displayTxt.textContent = firstNumber;
         } else {
             secondNumber = parseInt(btn.textContent);
             console.log(`Second Number: ${secondNumber}`);
         }
-        displayTxt.textContent = btn.textContent;
+        // displayTxt.textContent = btn.textContent;
         // console.log(e);
     });
 });
@@ -89,26 +84,4 @@ equalBtn.addEventListener('click', () => {
 });
 
 
-
-
-
-// =====================================================
-
-// const additionOperation = function add(a, b) {
-//     return a + b;
-// }
-
-// const subtractionOperation = function subtract(a, b) {
-//     return a - b;
-// }
-
-// const multiplicationOperation = function multiply(a, b) {
-//     return a * b;
-// }
-
-// const divisionOperation = function divide(a, b) {
-//     return a / b;
-// }
-
-// module.exports = additionOperation, subtractionOperation, multiplicationOperation, divisionOperation;
 
