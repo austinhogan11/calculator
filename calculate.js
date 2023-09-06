@@ -22,17 +22,19 @@ let operator;
 function operate(firstNumber, operator, secondNumber) {
     switch (operator) {
         case "+":
-            console.log(`${firstNumber} ${operator} ${secondNumber} = ${add(firstNumber, secondNumber)}`)
-            return add(firstNumber, secondNumber);
+            return add(firstNumber, secondNumber.toFixed(4));
         case "-":
-            console.log(`${firstNumber} ${operator} ${secondNumber} = ${subtract(firstNumber, secondNumber)}`)
-            return subtract(firstNumber, secondNumber)
+            return subtract(firstNumber, secondNumber).toFixed(4);
         case "*":
-            console.log(`${firstNumber} ${operator} ${secondNumber} = ${multiply(firstNumber, secondNumber)}`)
-            return multiply(firstNumber, secondNumber)
+            return multiply(firstNumber, secondNumber).toFixed(4);
         case "/":
-            console.log(`${firstNumber} ${operator} ${secondNumber} = ${divide(firstNumber, secondNumber)}`)
-            return divide(firstNumber, secondNumber)
+            if (secondNumber !== 0) {
+                return divide(firstNumber, secondNumber).toFixed(4);
+            } else {
+                console.log("Cannot divide by zero!!!")
+                return 0;
+            }
+
         default:
             console.log("I'm not programmed to handle that yet.")
     }
@@ -44,12 +46,10 @@ numBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         if (operator === undefined) {
             buffer.push(btn.textContent);
-            console.log(`Buffer: ${buffer}`)
             firstNumber = parseInt(buffer.join(''));
             displayTxt.textContent = firstNumber;
         } else {
             buffer.push(btn.textContent);
-            console.log(`Buffer: ${buffer}`)
             secondNumber = parseInt(buffer.join(''));
             displayTxt.textContent = secondNumber;
         }
@@ -62,38 +62,32 @@ opBtns.forEach((btn) => {
         if (firstNumber !== undefined && secondNumber === undefined) {
             buffer = [];
             operator = btn.textContent;
-            console.log(`Operator: ${operator}`);
-            console.log(`Buffer: ${buffer}`)
         } else {
             processEquals();
             operator = btn.textContent;
-            console.log(`Operator: ${operator}`);
-            console.log(`Buffer: ${buffer}`)
         }
     });
 });
 
-const clearBtn = document.querySelector('#clear-btn');
-clearBtn.addEventListener('click', () => {
+function clearCalculator() {
     displayTxt.textContent = "0";
     buffer = [];
     firstNumber = undefined;
     secondNumber = undefined;
     operator = undefined;
-});
+}
+
+const clearBtn = document.querySelector('#clear-btn');
+clearBtn.addEventListener('click', clearCalculator);
 
 function processEquals() {
     result = operate(firstNumber, operator, secondNumber);
+    clearCalculator();
     displayTxt.textContent = result;
-    buffer = [];
     firstNumber = result;
-    secondNumber = undefined;
-    operator = undefined;
 }
 const equalBtn = document.querySelector('#eq-btn');
-equalBtn.addEventListener('click', () => {
-    processEquals();
-});
+equalBtn.addEventListener('click', processEquals);
 
 
 
