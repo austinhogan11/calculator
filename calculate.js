@@ -1,5 +1,3 @@
-// Calculate Here
-
 function add(a, b) {
     return a + b;
 }
@@ -15,6 +13,7 @@ function multiply(a, b) {
 function divide(a, b) {
     return a / b;
 }
+
 let buffer = [];
 let firstNumber;
 let secondNumber;
@@ -44,15 +43,16 @@ const numBtns = document.querySelectorAll(".num-btn");
 numBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         if (operator === undefined) {
-            buffer.push(parseInt(btn.textContent));
-            firstNumber = buffer.join('');
+            buffer.push(btn.textContent);
+            console.log(`Buffer: ${buffer}`)
+            firstNumber = parseInt(buffer.join(''));
             displayTxt.textContent = firstNumber;
         } else {
-            secondNumber = parseInt(btn.textContent);
-            console.log(`Second Number: ${secondNumber}`);
+            buffer.push(btn.textContent);
+            console.log(`Buffer: ${buffer}`)
+            secondNumber = parseInt(buffer.join(''));
+            displayTxt.textContent = secondNumber;
         }
-        // displayTxt.textContent = btn.textContent;
-        // console.log(e);
     });
 });
 
@@ -60,8 +60,15 @@ const opBtns = document.querySelectorAll(".op-btn");
 opBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         if (firstNumber !== undefined && secondNumber === undefined) {
+            buffer = [];
             operator = btn.textContent;
             console.log(`Operator: ${operator}`);
+            console.log(`Buffer: ${buffer}`)
+        } else {
+            processEquals();
+            operator = btn.textContent;
+            console.log(`Operator: ${operator}`);
+            console.log(`Buffer: ${buffer}`)
         }
     });
 });
@@ -69,18 +76,23 @@ opBtns.forEach((btn) => {
 const clearBtn = document.querySelector('#clear-btn');
 clearBtn.addEventListener('click', () => {
     displayTxt.textContent = "0";
+    buffer = [];
     firstNumber = undefined;
     secondNumber = undefined;
     operator = undefined;
 });
 
-const equalBtn = document.querySelector('#eq-btn');
-equalBtn.addEventListener('click', () => {
+function processEquals() {
     result = operate(firstNumber, operator, secondNumber);
+    displayTxt.textContent = result;
+    buffer = [];
     firstNumber = result;
-    displayTxt.textContent = firstNumber;
     secondNumber = undefined;
     operator = undefined;
+}
+const equalBtn = document.querySelector('#eq-btn');
+equalBtn.addEventListener('click', () => {
+    processEquals();
 });
 
 
