@@ -18,18 +18,20 @@ let buffer = [];
 let firstNumber;
 let secondNumber;
 let operator;
+let onFirstNumber = true;
+let onSecondNumber = false;
 
 function operate(firstNumber, operator, secondNumber) {
     switch (operator) {
         case "+":
-            return add(firstNumber, secondNumber.toFixed(4));
+            return add(firstNumber, secondNumber);
         case "-":
-            return subtract(firstNumber, secondNumber).toFixed(4);
+            return subtract(firstNumber, secondNumber);
         case "*":
-            return multiply(firstNumber, secondNumber).toFixed(4);
+            return multiply(firstNumber, secondNumber);
         case "/":
             if (secondNumber !== 0) {
-                return divide(firstNumber, secondNumber).toFixed(4);
+                return divide(firstNumber, secondNumber);
             } else {
                 console.log("Cannot divide by zero!!!")
                 return 0;
@@ -81,13 +83,17 @@ const clearBtn = document.querySelector('#clear-btn');
 clearBtn.addEventListener('click', clearCalculator);
 
 function processEquals() {
-    result = operate(firstNumber, operator, secondNumber);
+    result = operate(parseInt(firstNumber), operator, parseInt(secondNumber));
     clearCalculator();
     displayTxt.textContent = result;
     firstNumber = result;
 }
+
 const equalBtn = document.querySelector('#eq-btn');
 equalBtn.addEventListener('click', processEquals);
 
-
+const delBtn = document.querySelector('#del-btn');
+delBtn.addEventListener('click', () => {
+    buffer.pop();
+});
 
