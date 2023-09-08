@@ -20,6 +20,7 @@ let secondNumber;
 let operator;
 let onFirstNumber = true;
 let onSecondNumber = false;
+let currentNumber = 0;
 
 function operate(firstNumber, operator, secondNumber) {
     switch (operator) {
@@ -48,17 +49,39 @@ const numBtns = document.querySelectorAll(".num-btn");
 numBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         if (buffer.length < 9) {
-            if (operator === undefined) {
-                buffer.push(btn.textContent);
-                firstNumber = parseInt(buffer.join(''));
-                displayTxt.textContent = firstNumber;
+            if (onFirstNumber) {
+                firstNumber = buildCurrentNumber(btn);
             } else {
-                buffer.push(btn.textContent);
-                secondNumber = parseInt(buffer.join(''));
-                displayTxt.textContent = secondNumber;
+                secondNumber = buildCurrentNumber(btn);
             }
         }
     });
+});
+
+function buildCurrentNumber(btn) {
+    buffer.push(btn.textContent);
+    console.log(`Buffer: ${buffer}`);
+    currentNumber = parseFloat(buffer.join(''));
+    console.log(`firstNumber: ${currentNumber}`);
+    displayTxt.textContent = currentNumber;
+    return currentNumber;
+}
+
+const decimalBtn = document.querySelector(".decimal");
+decimalBtn.addEventListener('click', () => {
+    if (!buffer.includes(".")) {
+        buffer.push(decimalBtn.textContent);
+        console.log(`Buffer: ${buffer}`);
+        if (onFirstNumber) {
+            firstNumber = parseFloat(buffer.join(''));
+            console.log(`firstNumber: ${firstNumber}`);
+            displayTxt.textContent = firstNumber;
+        } else {
+            secondNumber = parseFloat(buffer.join(''));
+            console.log(`secondNumber: ${secondNumber}`);
+            displayTxt.textContent = secondNumber;
+        }
+    }
 });
 
 const opBtns = document.querySelectorAll(".op-btn");
@@ -68,6 +91,8 @@ opBtns.forEach((btn) => {
         if (firstNumber !== undefined && secondNumber === undefined) {
             buffer = [];
             operator = btn.textContent;
+            onFirstNumber = false;
+            onSecondNumber = true;
         } else {
             processEquals();
             operator = btn.textContent;
@@ -81,6 +106,8 @@ function clearCalculator() {
     firstNumber = undefined;
     secondNumber = undefined;
     operator = undefined;
+    onFirstNumber = true;
+    onSecondNumber = false;
 }
 
 const clearBtn = document.querySelector('#clear-btn');
@@ -88,7 +115,7 @@ clearBtn.addEventListener('click', clearCalculator);
 
 function processEquals() {
     if (secondNumber !== undefined) {
-        result = operate(parseInt(firstNumber), operator, parseInt(secondNumber));
+        result = operate(parseFloat(firstNumber), operator, parseFloat(secondNumber));
         clearCalculator();
         displayTxt.textContent = result;
         firstNumber = result;
@@ -106,3 +133,9 @@ equalBtn.addEventListener('click', processEquals);
 function formatDecimals(num) {
     return parseFloat(num.toString().slice(0, 9));
 }
+
+// const pmBtn = document.querySelector('#pm-btn');
+// pmBtn.addEventListener('click', changeSign);
+
+// function changeSign() {}
+
