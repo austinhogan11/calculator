@@ -28,6 +28,7 @@ const decimalBtn = document.querySelector(".decimal");
 const opBtns = document.querySelectorAll(".op-btn");
 const clearBtn = document.querySelector('#clear-btn');
 const equalBtn = document.querySelector('#eq-btn');
+const delBtn = document.querySelector('#del-btn');
 
 function operate(firstNumber, operator, secondNumber) {
     switch (operator) {
@@ -57,6 +58,21 @@ function buildCurrentNumber(btn) {
         currentNumber = parseFloat(buffer.join(''));
         console.log(`Current Number: ${currentNumber}`)
         displayTxt.textContent = currentNumber;
+        return currentNumber;
+    }
+}
+
+function removeLastDigit() {
+    if (buffer.length > 0) {
+        console.log("Popping")
+        buffer.pop()
+        if (buffer.length === 0)
+            currentNumber = 0;
+        else
+            currentNumber = parseFloat(buffer.join(''));
+        displayTxt.textContent = currentNumber;
+        console.log(`Buffer: ${buffer}`)
+        console.log(`Current Number: ${currentNumber}`)
         return currentNumber;
     }
 }
@@ -105,7 +121,10 @@ opBtns.forEach((btn) => {
             console.log("On second number");
         } else {
             processEquals();
+            onSecondNumber = true;
+            onFirstNumber = false;
             operator = btn.textContent;
+            console.log("chaining")
             console.log(`Operator: ${operator}`);
             console.log("On second number");
         }
@@ -134,4 +153,12 @@ numBtns.forEach((btn) => {
             console.log(`Second Number: ${secondNumber}`);
         }
     });
+});
+
+delBtn.addEventListener('click', () => {
+    if (onFirstNumber) {
+        firstNumber = removeLastDigit();
+    } else {
+        secondNumber = removeLastDigit();
+    }
 });
